@@ -102,20 +102,25 @@
                                         "dynamodb:GetItem",
                                         "dynamodb:UpdateItem"
                                     ],
-                                    "Resource": "*"
+                                    "Resource": {
+                                        "Fn::GetAtt": [
+                                            "dynamodbTable",
+                                            "Arn"
+                                        ]
+                                    }
                                 }
                             ]
-                            }
-                        ]
-                    ]
-                }
+                        }
+                    }
+                ]
             }
-        },
-        "Outputs": {
-            "VisitorCountAPI": {
-                "Value": {
-                    "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/count/"
-                }
+        }
+    },
+    "Outputs": {
+        "VisitorCountAPI": {
+            "Value": {
+                "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/count/"
             }
         }
     }
+}
