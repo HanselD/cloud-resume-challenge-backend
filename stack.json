@@ -33,7 +33,7 @@
             }
         },
         "lambdaFunction": {
-            "Type": "AWS::Lambda::Function",
+            "Type": "AWS::Serverless::Function",
             "Properties": {
                 "CodeUri": "code/",
                 "Handler": "app.lambda_handler",
@@ -59,11 +59,11 @@
                 "Timeout": 5,
                 "Environment": {
                     "Variables": {
-                        "tablename": [
+                        "tablename": 
                             {
                                 "Ref": "dynamodbTable"
                             }
-                        ]
+                        
                     }
                 },
                 "Events": {
@@ -97,7 +97,7 @@
                     ]
                 },
                 "Path": "/",
-                "ManagedPolicyArns": "AWSLambdaBasicExecutionRole",
+                "ManagedPolicyArns": ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"],
                 "Policies": [
                     {
                         "PolicyName": "DynamoDB-ReadWrite",
