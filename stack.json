@@ -4,7 +4,7 @@
     "Transform": "AWS::Serverless-2016-10-31",
     "Parameters": {
         "ApplicationName": {
-            "Description": "Name of the application, will be used for tags",
+            "Description": "Name of the application, will be used for tags and naming resources",
             "Type": "String",
             "Default": "Resumebackend"
         }
@@ -57,7 +57,13 @@
                 },
                 "MemorySize": 128,
                 "Timeout": 5,
-                "Environment": "",
+                "Environment": {
+                    "Variables" : {
+                        "tablename" : {
+                        { "Ref": "dynamodbTable" }
+                        }
+                    }
+                },
                 "Events": {
                     "VisitorCount": {
                         "Type": "Api",
