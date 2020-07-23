@@ -20,11 +20,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install  pytest
-          if [ -f ./code/requirements.txt ]; then pip install -r ./code/requirements.txt; fi
-          export tablename=test
+          if [ -f ./code/requirements.txt ]; then pip install -r ./code/requirements.txt; fi          
       
       - name: Test with pytest
         run: |
+          export tablename=test
           python -m pytest
 
       - name: sam build
