@@ -21,10 +21,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install  pytest
           if [ -f ./code/requirements.txt ]; then pip install -r ./code/requirements.txt; fi
+          export tablename=test
       
       - name: Test with pytest
         run: |
-          pytest
+          python -m pytest
 
       - name: sam build
         uses: youyo/aws-sam-action/python3.8@master
