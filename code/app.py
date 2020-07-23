@@ -24,11 +24,12 @@ def lambda_handler(event, context):
         )
 
         #return to website
+        
         return {
             'count': current,
             'statusCode': 200
         }
-        
+
     except Exception as e:
         return {
             'statusCode': 500,
