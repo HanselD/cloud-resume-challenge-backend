@@ -2,7 +2,7 @@ from moto import mock_dynamodb2
 import pytest
 import boto3
 import os
-from backend.code import app
+from code import app
 
 os.environ['tablename'] = 'test'
 
