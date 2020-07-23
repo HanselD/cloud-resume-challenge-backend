@@ -24,10 +24,6 @@
                         ]
                     ]
                 },
-                "KeySchemaElement": {
-                    "AttributeName": "Id",
-                    "KeyType": "HASH"
-                },
                 "Tags": {
                     "Key": "Name",
                     "Value": {
@@ -61,6 +57,7 @@
                 },
                 "MemorySize": 128,
                 "Timeout": 5,
+                "Environment": "",
                 "Events": {
                     "VisitorCount": {
                         "Type": "Api",
@@ -75,17 +72,50 @@
         "LambdaRole": {
             "Type": "AWS::IAM::Role",
             "Properties": {
-                "AssumeRolePolicyDocument": {},
-                "Path": "",
-                "Policies": []
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "lambda.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "Path": "/",
+                "ManagedPolicyArns": "AWSLambdaBasicExecutionRole",
+                "Policies": [
+                    {
+                        "PolicyName": "DynamoDB-ReadWrite",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "dynamodb:GetItem",
+                                        "dynamodb:UpdateItem"
+                                    ],
+                                    "Resource": "*"
+                                }
+                            ]
+                            }
+                        ]
+                    ]
+                }
             }
-        }
-    },
-    "Outputs": {
-        "VisitorCountAPI": {
-            "Value": {
-                "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/count/"
+        },
+        "Outputs": {
+            "VisitorCountAPI": {
+                "Value": {
+                    "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/count/"
+                }
             }
         }
     }
-}
