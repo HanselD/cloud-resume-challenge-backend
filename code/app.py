@@ -28,6 +28,7 @@ def lambda_handler(event, context):
             'count': current,
             'statusCode': 200
         }
+        
     except Exception as e:
         return {
             'statusCode': 500,
