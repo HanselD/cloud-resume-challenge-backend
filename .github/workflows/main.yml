@@ -1,9 +1,9 @@
 name: CI
 on:
   push:        
-    paths:
-    - 'code/*'
-    - 'stack.json'
+    # paths:
+    # - 'code/*'
+    # - 'stack.json'
 jobs:
   build:
     runs-on: ubuntu-latest
