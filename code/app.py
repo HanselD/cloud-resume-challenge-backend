@@ -10,7 +10,7 @@ def lambda_handler(event, context):
     
     try:
         #get current value from ddb
-        resp = table.get_item(Key={'id':1})
+        resp = table.get_item(Key={'id':1})        
         current = resp['Item']['visitors']
 
         #add 1
