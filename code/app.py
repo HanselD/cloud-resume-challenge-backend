@@ -23,8 +23,7 @@ def lambda_handler(event, context):
             ExpressionAttributeValues={':val1': current}
         )
 
-        #return to website
-        
+        #return to website        
         return {
             'count': current,
             'statusCode': 200
