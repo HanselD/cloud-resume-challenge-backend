@@ -1,0 +1,93 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "CFN stack for the backend of my resume. Takes care of all resources for the visitor count on the website",
+    "Transform": "AWS::Serverless-2016-10-31",
+    "Parameters": {
+        "ApplicationName": {
+            "Description": "Name of the application, will be used for tags",
+            "Type": "String",
+            "Default": "Resumebackend"
+        }
+    },
+    "Resources": {
+        "dynamodbTable": {
+            "Type": "AWS::Serverless::SimpleTable",
+            "Properties": {
+                "TableName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            {
+                                "Ref": "ApplicationName"
+                            },
+                            "Table"
+                        ]
+                    ]
+                },
+                "KeySchemaElement":{"AttributeName":"Id", "KeyType":"HASH"},
+                "Tags": 
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Ref": "ApplicationName"
+                        }
+                    }
+                
+            }
+        },
+        
+        "lambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "CodeUri":"code/",
+            "Handler": "app.lambda_handler",
+            "Role": 
+            { "Fn::GetAtt" : [ "LambdaRole", "Arn" ]},
+            "Runtime": "python3.8",
+            "FunctionName": 
+            {
+                "Fn::Join": [
+                    "-",
+                    [
+                        {
+                            "Ref": "ApplicationName"
+                        },
+                        "Lambda"
+                    ]
+                ]
+            }
+            ,
+            "MemorySize": 128,
+            "Timeout": 5,
+            "Events": {
+                "VisitorCount": {
+                   "Type": "Api",
+                   "Properties": {
+                      "Path": "/count",
+                      "Method": "post" 
+                   }
+                }
+             }         
+          }
+        },
+        
+        "LambdaRole": {
+           "Type": "AWS::IAM::Role",
+           "Properties": {
+              "AssumeRolePolicyDocument": {  },
+              "Path": "",
+              "Policies": [  ]
+           }
+        }
+        
+        
+        
+    },
+    "Outputs": {
+        
+        "VisitorCountAPI" : {
+          "Value" : {"Fn::Sub" : "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/count/"}
+        }
+        
+    }
+}
