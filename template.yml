@@ -5,7 +5,7 @@ Description: Template for resume back-end
 ApplicationName:
   Description: "Name of application"
   Type: String
-  Default: resumebackend
+  Default: "resumebackend"
 
 Resources:
   MyAPI:
