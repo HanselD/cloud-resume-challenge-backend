@@ -47,7 +47,7 @@ Resources:
     Properties:
       TableName: !Ref ApplicationName 
 
-  LambdaRole:
+  lambdaRole:
     Type: AWS::IAM::Role
     Properties:
       Path: /
