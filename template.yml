@@ -46,7 +46,10 @@ Resources:
   dynamodbTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: !Ref ApplicationName 
+      TableName: !Ref ApplicationName
+      PrimaryKey:
+        Name: id
+        Type: Number
 
   lambdaRole:
     Type: AWS::IAM::Role
