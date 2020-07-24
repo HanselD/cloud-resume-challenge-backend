@@ -12,10 +12,7 @@ Resources:
   MyAPI:
     Type: AWS::Serverless::Api
     Properties:
-        Name: !Join 
-          - !Ref ApplicationName
-          - '-'
-          - 'API'
+        Name: !Join ['-',[!Ref ApplicationName,'API']]          
         StageName: Prod
         EndpointConfiguration: EDGE
         Cors:
@@ -74,8 +71,3 @@ Resources:
             Principal:
               Service:
                 - lambda.amazonaws.com    
-
-Outputs:
-  CountApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/count/"  
