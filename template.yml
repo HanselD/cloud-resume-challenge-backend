@@ -8,6 +8,18 @@ ApplicationName:
   Default: resumebackend
 
 Resources:
+  MyAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+        Name: !Ref ApplicationName
+        StageName: Prod
+        EndpointConfiguration: EDGE
+        Cors:
+            AllowMethods: "'POST, OPTIONS'"
+            AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+            AllowOrigin: "'*'"
+  
+  
   LambdaFunction:
     Type: AWS::Serverless::Function 
     Properties:
@@ -23,16 +35,8 @@ Resources:
           Properties:
             Path: /count
             Method: POST
-            Cors: 
-              origin: '*'
-              headers:
-                - Content-Type
-                - X-Amz-Date
-                - Authorization
-                - X-Api-Key
-                - X-Amz-Security-Token
-                - X-Amz-User-Agent
-              
+            RestApiId: 
+              Ref: MyAPI
   
   dynamodbTable:
     Type: AWS::Serverless::SimpleTable
