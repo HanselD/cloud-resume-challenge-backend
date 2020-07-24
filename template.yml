@@ -4,12 +4,7 @@ Outputs:
     Value: !Sub >-
       https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/count/
 Resources:
-  ServerlessRestApiProdStage:
-    Type: AWS::ApiGateway::Stage
-    Properties:
-      DeploymentId: !Ref ServerlessRestApiDeployment355e5f1fa3
-      RestApiId: !Ref ServerlessRestApi
-      StageName: Prod      
+      
   
   OptionsMethod:
     Type: AWS::ApiGateway::Method
@@ -111,15 +106,7 @@ Resources:
                 uri: !Sub >-
                   arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaFunction.Arn}/invocations
               responses: {}
-        swagger: '2.0'
-  
-  ServerlessRestApiDeployment355e5f1fa3:
-    Type: AWS::ApiGateway::Deployment
-    Properties:
-      RestApiId: !Ref ServerlessRestApi
-      Description: 'RestApi deployment id: 355e5f1fa3796d61f9166a96a1ee6545ab8612ca'
-      StageName: Stage
-    DependsOn: lambdaFunction
+        swagger: '2.0'  
   
   LambdaRole:
     Type: AWS::IAM::Role
