@@ -2,10 +2,11 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Template for resume back-end
 
-ApplicationName:
-  Description: "Name of application"
-  Type: String
-  Default: "resumebackend"
+Parameters:
+  ApplicationName:
+    Description: "Name of application"
+    Type: String
+    Default: "resumebackend"
 
 Resources:
   MyAPI:
