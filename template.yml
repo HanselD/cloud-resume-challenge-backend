@@ -1,113 +1,35 @@
-AWSTemplateFormatVersion: 2010-09-09
-Outputs:
-  VisitorCountAPI:
-    Value: !Sub >-
-      https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/count/
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Template for resume back-end
+
+ApplicationName:
+  Description: Name of application 
+  Type: String
+  Default: resumebackend
+
 Resources:
-      
-  
-  OptionsMethod:
-    Type: AWS::ApiGateway::Method
+  LambdaFunction:
+    Type: AWS::Serverless::Function 
     Properties:
-      AuthorizationType: NONE
-      RestApiId: !Ref ServerlessRestApi
-      ResourceId: !GetAtt ServerlessRestApi.RootResourceId
-      HttpMethod: OPTIONS
-      MethodResponses:
-      - StatusCode: 200        
-        ResponseParameters:
-          method.response.header.Access-Control-Allow-Headers: false
-          method.response.header.Access-Control-Allow-Methods: false
-          method.response.header.Access-Control-Allow-Origin: false   
-      Integration:
-        Type: MOCK
-        IntegrationResponses:
-        - StatusCode: 200
-          ResponseParameters:
-            method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-            method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-            method.response.header.Access-Control-Allow-Origin: "'*'"
-          ResponseTemplates:
-            application/json: ''
-        PassthroughBehavior: WHEN_NO_MATCH
-        RequestTemplates:
-          application/json: '{"statusCode": 200}' 
-      
-  
-  lambdaFunction:
-    Type: AWS::Lambda::Function
-    Properties:
-      Code:
-        S3Bucket: resume-challenge
-        S3Key: app.zip
-      FunctionName: !Join 
-        - '-'
-        - - !Ref ApplicationName
-          - Lambda
-      Tags:
-        - Value: SAM
-          Key: 'lambda:createdBy'
-      MemorySize: 128
-      Environment:
-        Variables:
-          tablename: !Ref dynamodbTable
+      CodeUri: code/
       Handler: app.lambda_handler
-      Role: !GetAtt 
-        - LambdaRole
-        - Arn
-      Timeout: 5
       Runtime: python3.8
+      Role: !GetAtt 
+        - lambdaRole
+        - Arn
+      Events:
+        Countapi:
+          Type: Api 
+          Properties:
+            Path: /count
+            Method: POST
+            Cors: true
   
   dynamodbTable:
-    Type: AWS::DynamoDB::Table
+    Type: AWS::Serverless::SimpleTable
     Properties:
-      KeySchema:
-        - KeyType: HASH
-          AttributeName: id
-      BillingMode: PAY_PER_REQUEST
-      TableName: !Join 
-        - '-'
-        - - !Ref ApplicationName
-          - Table
-      AttributeDefinitions:
-        - AttributeName: id
-          AttributeType: S
-      Tags:
-        - Value: Name
-          Key: Key
-        - Value: !Ref ApplicationName
-          Key: Value
-  
-  lambdaFunctionVisitorCountPermissionProd:
-    Type: AWS::Lambda::Permission
-    Properties:
-      Action: 'lambda:InvokeFunction'
-      Principal: apigateway.amazonaws.com
-      FunctionName: !Ref lambdaFunction
-      SourceArn: !Sub 
-        - >-
-          arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${__ApiId__}/${__Stage__}/POST/count
-        - __Stage__: '*'
-          __ApiId__: !Ref ServerlessRestApi
-  
-  ServerlessRestApi:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Body:
-        info:
-          version: '1.0'
-          title: !Ref ApplicationName
-        paths:
-          /count:
-            post:
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri: !Sub >-
-                  arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaFunction.Arn}/invocations
-              responses: {}
-        swagger: '2.0'  
-  
+      TableName: !Ref ApplicationName 
+
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -134,12 +56,9 @@ Resources:
             Effect: Allow
             Principal:
               Service:
-                - lambda.amazonaws.com
-Description: >-
-  CFN stack for the backend of my resume. Takes care of all resources for the
-  visitor count on the website
-Parameters:
-  ApplicationName:
-    Default: Resumebackend
-    Type: String
-    Description: 'Name of the application, will be used for tags and naming resources'
+                - lambda.amazonaws.com    
+
+Outputs:
+  CountApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/count/"  
