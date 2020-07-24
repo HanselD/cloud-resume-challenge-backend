@@ -11,7 +11,7 @@ Resources:
   MyAPI:
     Type: AWS::Serverless::Api
     Properties:
-        Name: !Ref ApplicationName
+        Name: resumebackendAPI
         StageName: Prod
         EndpointConfiguration: EDGE
         Cors:
