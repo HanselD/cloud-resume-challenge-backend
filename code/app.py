@@ -11,7 +11,7 @@ def lambda_handler(event, context):
 
     try:
         # get current value from ddb
-        print ("[INFO] Retrieving current count from table)
+        print ("[INFO] Retrieving current count from table")
         resp = table.get_item(Key={'id': 1})
         current = resp['Item']['visitors']
 
