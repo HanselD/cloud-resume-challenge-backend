@@ -32,10 +32,10 @@ def lambda_handler(event, context):
                 'count': current, }),
             'statusCode': 200,
             "headers": {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "application/json",
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'application/json',
                 'Access-Control-Allow-Methods': 'OPTIONS,POST',
-                "Access-Control-Allow-Credentials": 'true'
+                'Access-Control-Allow-Credentials': 'true'
             },
         }
 
