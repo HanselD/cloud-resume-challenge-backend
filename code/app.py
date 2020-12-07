@@ -28,10 +28,10 @@ def lambda_handler(event, context):
         print ("[INFO] Retrieved count, returning to client")
         # return to website
         return {
-            "body": json.dumps({
-                'count': current, }),
+            'body': json.dumps({
+                'count': str(current), }),
             'statusCode': 200,
-            "headers": {
+            'headers': {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Headers': 'application/json',
                 'Access-Control-Allow-Methods': 'OPTIONS,POST',
