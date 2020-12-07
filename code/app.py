@@ -11,6 +11,7 @@ def lambda_handler(event, context):
 
     try:
         # get current value from ddb
+        print ("[INFO] Retrieving current count from table)
         resp = table.get_item(Key={'id': 1})
         current = resp['Item']['visitors']
 
@@ -18,12 +19,13 @@ def lambda_handler(event, context):
         current += 1
 
         # update ddb
+        print ("[INFO] Updating table with count")
         table.update_item(
             Key={'id': 1},
             UpdateExpression='SET visitors = :val1',
             ExpressionAttributeValues={':val1': current}
         )
-
+        print ("[INFO] Retrieved count, returning to client")
         # return to website
         return {
             "body": json.dumps({
@@ -38,6 +40,7 @@ def lambda_handler(event, context):
         }
 
     except Exception as e:
+        print ("[ERROR] Unexepcted error, check logs")
         return {
             'statusCode': 500,
             'error': str(e)
